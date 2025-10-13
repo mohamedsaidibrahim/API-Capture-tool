@@ -3,6 +3,8 @@ import { IAuthenticationService } from '../../core/interfaces/services.interface
 import { IConfiguration } from '../../core/interfaces/config.interface';
 import { IPage } from '../../core/interfaces/browser.interface';
 import { AuthenticationException } from '../../core/exceptions/base.exception';
+import dotenv from 'dotenv'
+dotenv.config();
 
 export class AuthenticationService implements IAuthenticationService {
     private authenticated: boolean = false;
@@ -25,7 +27,7 @@ export class AuthenticationService implements IAuthenticationService {
             });
 
             const currentUrl = this.page.url();
-            if (currentUrl.includes("/erp/dashboard") || currentUrl === baseUrl) {
+            if (currentUrl.includes("/erp/") || currentUrl === baseUrl) {
                 console.log("Already logged in or redirected to dashboard. Skipping login steps.");
                 this.authenticated = true;
                 return;
@@ -39,13 +41,13 @@ export class AuthenticationService implements IAuthenticationService {
             await this.page.click('button[type="submit"]:first-of-type');
 
             // Wait for navigation to complete
-            await this.page.waitForSelector(assertionSelector); 
+            await this.page.waitForSelector(process.env.AssertionSelector ?? "p.date");
 
             await this.page.waitForSelector("body", { timeout: 60000 });
 
             this.authenticated = true;
             console.log("✅ Authentication successful!");
-        } catch (error:any) {
+        } catch (error: any) {
             throw new AuthenticationException(`Login failed: ${error.message}`);
         }
     }

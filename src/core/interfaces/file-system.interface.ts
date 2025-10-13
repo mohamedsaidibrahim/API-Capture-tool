@@ -6,7 +6,7 @@ export interface IFileSystem {
   existsSync(path: string): boolean;
   mkdirSync(path: string, options?: any): void;
   writeFileSync(path: string, data: string): void;
-  readFileSync(path: string, encoding: string): string;
+  readFileSync(path: string, encoding: BufferEncoding): string;
 }
 
 export interface IUrlRepository {

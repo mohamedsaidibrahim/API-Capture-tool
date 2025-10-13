@@ -1,6 +1,8 @@
 // src/infrastructure/config/configuration.service.ts
 import { IConfiguration } from '../../core/interfaces/config.interface';
 import { ConfigurationException } from '../../core/exceptions/base.exception';
+import dotenv from 'dotenv'
+dotenv.config();
 
 export class ConfigurationService implements IConfiguration {
     private readonly config: Map<string, any> = new Map();
@@ -11,15 +13,15 @@ export class ConfigurationService implements IConfiguration {
 
     private loadConfiguration(): void {
         try {
-            this.config.set('USERNAME', process.env.API_CAPTURE_USERNAME || 'semob83188@maonyn.com');
-            this.config.set('PASSWORD', process.env.API_CAPTURE_PASSWORD || 'e01144778899A$*');
-            this.config.set('TARGET_API_PREFIX', 'https://microtecsaudi.com:2032/erp-apis');
-            this.config.set('OUTPUT_DIR', '08new_api_endpoints_output');
-            this.config.set('CAPTURE_TIMEOUT', 15000);
-            this.config.set('NAVIGATION_TIMEOUT', 60000);
+            this.config.set('USERNAME', process.env.API_CAPTURE_USERNAME);
+            this.config.set('PASSWORD', process.env.API_CAPTURE_PASSWORD);
+            this.config.set('TARGET_API_PREFIX', process.env.TARGET_API_PREFIX);
+            this.config.set('OUTPUT_DIR', process.env.OUTPUT_DIR);
+            this.config.set('CAPTURE_TIMEOUT', process.env.CAPTURE_TIMEOUT);
+            this.config.set('NAVIGATION_TIMEOUT', process.env.NAVIGATION_TIMEOUT);
 
             // FRONTEND_BASE_URL will be set from JSON file
-        } catch (error:any) {
+        } catch (error: any) {
             throw new ConfigurationException(`Failed to load configuration: ${error.message}`);
         }
     }

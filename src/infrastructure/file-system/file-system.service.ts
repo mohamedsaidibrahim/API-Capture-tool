@@ -2,7 +2,6 @@
 import { IFileSystem } from '../../core/interfaces/file-system.interface';
 import { FileSystemException } from '../../core/exceptions/base.exception';
 import fs from 'fs';
-import path from 'path';
 
 export class FileSystemService implements IFileSystem {
     existsSync(filePath: string): boolean {
@@ -25,7 +24,7 @@ export class FileSystemService implements IFileSystem {
         }
     }
 
-    readFileSync(filePath: string, encoding: string): any {
+    readFileSync(filePath: string, encoding: BufferEncoding): any {
         try {
             return fs.readFileSync(filePath, { encoding: encoding, flag: 'r' });
         } catch (error: any) {
