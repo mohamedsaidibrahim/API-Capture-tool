@@ -2,12 +2,21 @@
     "base_url": "https://happytesting.microtecstage.com",
     "modules": {
         "General_Settings": {
-            "Dashboard": [
-                "/erp/"
-            ],
             "Master_data": {
-                "Tags": [
-                    "/erp/masterdata/tags"
+                "Company Definition": [
+                    "/erp/masterdata/company"
+                ],
+                "Discount Policy": [
+                    "/erp/masterdata/discount-policy"
+                ],
+                "Requests": [
+                    "/erp/masterdata/requests"
+                ],
+                "Financial Calendar": [
+                    "/erp/masterdata/financial-calendar",
+                    "/erp/masterdata/financial-calendar/add",
+                    "/erp/masterdata/financial-calendar/edit/1",
+                    "/erp/masterdata/financial-calendar/view/1"
                 ],
                 "Tax Group": [
                     "/erp/masterdata/tax-group"
@@ -15,64 +24,72 @@
                 "Tax Definition": [
                     "/erp/masterdata/tax-definition"
                 ],
-                "Financial Calendar": [
-                    "/erp/masterdata/financial-calendar",
-                    "/erp/masterdata/financial-calendar/add-financial-calendar",
-                    "/erp/masterdata/financial-calendar/edit-financial-calendar/1"
-                ],
-                "Currency": [
-                    "/erp/masterdata/currency-conversion",
+                "Currency Definition": [
                     "/erp/masterdata/currency-definition"
-                ]
-            },
-            "Adminstration": {
-                "Roles": [
-                    "/erp/admin/roles",
-                    "/erp/admin/roles/add",
-                    "/erp/admin/roles/edit/1"
+                ],
+                "Currency Conversion": [
+                    "/erp/masterdata/currency-conversion"
+                ],
+                "Tags Definition": [
+                    "/erp/masterdata"
+                ],
+                "Workflow Configuration": [
+                    "/erp/masterdata/workflowconfig"
                 ]
             },
             "Reports": {
                 "VAT Report": [
                     "/erp/reports/vat-report"
+                ],
+                "Vat Management": [
+                    "/erp/reports/zatca-invoices"
+                ]
+            },
+            "Administration": {
+                "Users Management": [
+                    "/erp/admin/roles"
+                ],
+                "Generate App Token": [
+                    "/erp/admin/generate-app-token"
+                ],
+                "Electronic Integration": [
+                    "/erp/admin/electronic-integration"
+                ],
+                "User Management": [
+                    "/erp/admin/user-management"
                 ]
             }
         },
         "Accounting": {
-            "Dashboard": [
-                "/accounting/"
-            ],
             "Master_data": {
-                "General Settings": [
+                "Accounting General Settings": [
                     "/accounting/masterdata/general-setting"
                 ],
                 "Chart of Accounts": [
                     "/accounting/masterdata/chartofaccounts"
                 ],
-                "Cost Center": [
+                "Cost Center Definition": [
                     "/accounting/masterdata/cost-center"
                 ]
             },
-            "Transactions": {
+            "Transaction": {
                 "Journal Entry": [
-                    "/accounting/transactions/journalentry",
-                    "/accounting/transactions/journalentry/sequence",
-                    "/accounting/transactions/journalentry/add",
-                    "/accounting/transactions/journalentry/edit/2725",
-                    "/accounting/transactions/journalentry/view/2725"
+                    "/accounting/transactions/journalentry"
                 ],
-                "Opening Balance": [
-                    "/accounting/transactions/journal-entry-opening-balance",
-                    "/accounting/transactions/journal-entry-opening-balance/view/1"
-                ],
-                "Account Statement": [
-                    "/accounting/transactions/account-statement"
-                ],
-                "Trial Balance": [
-                    "/accounting/transactions/trial-balance"
+                "Accounts Opening Balance": [
+                    "/accounting/transactions/journal-entry-opening-balance"
                 ]
             },
             "Reports": {
+                "Account Statement": [
+                    "/accounting/transactions/account-statement"
+                ],
+                "Cost Center Statement": [
+                    "/accounting/transactions/cost-center"
+                ],
+                "Trial Balance": [
+                    "/accounting/transactions/trial-balance"
+                ],
                 "Income Statement": [
                     "/accounting/reports/income-statement"
                 ],
@@ -82,294 +99,254 @@
             }
         },
         "Finance": {
-            "Dashboard": [
-                "/finance/"
-            ],
             "Master_data": {
-                "General Settings": [
+                "Finance General Settings": [
                     "/finance/masterdata/general-setting"
                 ],
-                "Treasury": [
+                "Treasury Definition": [
                     "/finance/masterdata/treasury-list"
                 ],
                 "Bank Definition": [
-                    "/finance/masterdata/bank-definition",
-                    "/finance/masterdata/bank-definition/add-bank-definition",
-                    "/finance/masterdata/bank-definition/edit-bank-definition/46",
-                    "/finance/masterdata/bank-definition/view-bank-definition/46"
-                ],
-                "Payment Terms": [
-                    "/finance/masterdata/paymentterm",
-                    "/finance/masterdata/paymentterm/add-payment-term",
-                    "/finance/masterdata/paymentterm/edit-payment-term/32",
-                    "/finance/masterdata/paymentterm/view-payment-term/32"
+                    "/finance/masterdata/bank-definition"
                 ],
                 "Payment Methods": [
-                    "/finance/masterdata/payment-method",
-                    "/finance/masterdata/payment-method/add",
-                    "/finance/masterdata/payment-method/edit/74",
-                    "/finance/masterdata/payment-method/view/74"
+                    "/finance/masterdata/payment-method"
+                ],
+                "Payment Terms": [
+                    "/finance/masterdata/paymentterm"
                 ]
             },
-            "Transactions": {
-                "Payment In": [
-                    "/finance/transactions/paymentin",
-                    "/finance/transactions/paymentin/sequence",
-                    "/finance/transactions/paymentin/add",
-                    "/finance/transactions/paymentin/edit/218",
-                    "/finance/transactions/paymentin/view/218"
+            "Transaction": {
+                "Payment IN": [
+                    "/finance/transactions/paymentin"
                 ],
-                "Payment Out": [
-                    "/finance/transactions/paymentout",
-                    "/finance/transactions/paymentout/sequence",
-                    "/finance/transactions/paymentout/add",
-                    "/finance/transactions/paymentout/edit/97",
-                    "/finance/transactions/paymentout/view/97"
+                "Payment OUT": [
+                    "/finance/transactions/paymentout"
                 ],
                 "Fund Transfer": [
-                    "/finance/transactions/fund-transfer",
-                    "/finance/transactions/fund-transfer/sequence",
-                    "/finance/transactions/fund-transfer/add",
-                    "/finance/transactions/fund-transfer/edit/17",
-                    "/finance/transactions/fund-transfer/view/17"
+                    "/finance/transactions/fund-transfer"
                 ],
-                "Reconciliation": [
+                "Payment Reconciliations": [
                     "/finance/transactions/payment-reconcilation"
                 ]
             },
             "Reports": {
                 "Treasury Statement": [
-                    "/finance/reports/treasury-statement",
-                    "/finance/reports/treasury-statement/1"
+                    "/finance/reports/treasury-statement"
                 ],
-                "Bank Statement": [
+                "Bank Account Statement": [
                     "/finance/reports/bank-account-statement"
                 ],
-                "Reconciliation": [
+                "Payment Reconciliation Report": [
                     "/finance/reports/reconcilation"
                 ],
-                "Payment Reports": [
-                    "/finance/reports/cash-payment-report",
+                "Payment Out Report": [
+                    "/finance/reports/cash-payment-report"
+                ],
+                "Payment In Report": [
                     "/finance/reports/cash-receipts"
                 ]
             }
         },
-        "Purchase": {
-            "Dashboard": [
-                "/purchase/"
-            ],
-            "Master_data": {
-                "Vendor Category": [
-                    "/purchase/masterdata/vendor-category",
-                    "/purchase/masterdata/vendor-category/add-vendor-category",
-                    "/purchase/masterdata/vendor-category/edit-vendor-category/18"
-                ],
-                "Vendor Definitions": [
-                    "/purchase/masterdata/vendor-definitions",
-                    "/purchase/masterdata/vendor-definitions/add-vendor-definitions",
-                    "/purchase/masterdata/vendor-definitions/edit-vendor-definitions/1025",
-                    "/purchase/masterdata/vendor-definitions/view-vendor-definitions/1025"
-                ],
-                "Opening Balance": [
-                    "/purchase/masterdata/vendor-opening-balance",
-                    "/purchase/masterdata/vendor-opening-balance/add-vendor-opening-balance",
-                    "/purchase/transactions/vendor-opening-balance/edit-vendor-opening-balance/4",
-                    "/purchase/transactions/vendor-opening-balance/view-vendor-opening-balance/4"
-                ]
-            },
-            "Transactions": {
-                "Purchase Order": [
-                    "/purchase/transactions/purchase-order",
-                    "/purchase/transactions/purchase-order/add",
-                    "/purchase/transactions/purchase-order/edit/42",
-                    "/purchase/transactions/purchase-order/view/42"
-                ],
-                "Purchase Invoice": [
-                    "/purchase/transactions/purchase-invoice",
-                    "/purchase/transactions/purchase-invoice/sequence",
-                    "/purchase/transactions/purchase-invoice/add",
-                    "/purchase/transactions/purchase-invoice/view/53",
-                    "/purchase/transactions/purchase-invoice/edit/53"
-                ],
-                "Return Invoice": [
-                    "/purchase/transactions/return-purchase-invoice",
-                    "/purchase/transactions/return-purchase-invoice/sequence",
-                    "/purchase/transactions/return-purchase-invoice/add",
-                    "/purchase/transactions/return-purchase-invoice/view/12",
-                    "/purchase/transactions/return-purchase-invoice/edit/12"
-                ]
-            },
-            "Reports": {
-                "Vendor Reports": [
-                    "/purchase/reports/vendor-reports"
-                ],
-                "Vendor Balance": [
-                    "/purchase/reports/vendor-balance-report"
-                ]
-            }
-        },
         "Sales": {
-            "Dashboard": [
-                "/sales"
-            ],
             "Master_data": {
-                "Customer Category": [
-                    "/sales/masterdata/customer-category",
-                    "/sales/masterdata/customer-category/edit/1019"
+                "Sales General Settings": [
+                    "/sales/masterdata/general-setting-sales"
                 ],
-                "Customer Definitions": [
-                    "/sales/masterdata/customer-definitions",
-                    "/sales/masterdata/customer-definitions/add-customer-definitions",
-                    "/sales/masterdata/customer-definitions/edit-customer-definitions/1006",
-                    "/sales/masterdata/customer-definitions/view-customer-definitions/1006"
+                "Customer Category": [
+                    "/sales/masterdata/customer-category"
+                ],
+                "Customer Definition": [
+                    "/sales/masterdata/customer-definitions"
                 ],
                 "Sales Team": [
-                    "/sales/masterdata/sales-team",
-                    "/sales/masterdata/sales-team/add",
-                    "/sales/masterdata/sales-team/edit/20",
-                    "/sales/masterdata/sales-team/view/20"
+                    "/sales/masterdata/sales-team"
                 ],
-                "Sales Person": [
-                    "/sales/masterdata/sales-man",
-                    "/sales/masterdata/sales-man/add",
-                    "/sales/masterdata/sales-man/edit/24",
-                    "/sales/masterdata/sales-man/view/24"
+                "Salesman Definition": [
+                    "/sales/masterdata/sales-man"
                 ],
                 "Price Policy": [
-                    "/sales/masterdata/price-policy",
-                    "/sales/masterdata/price-policy/sequence",
-                    "/sales/masterdata/price-policy/add",
-                    "/sales/masterdata/price-policy/view/6",
-                    "/sales/masterdata/price-policy/edit/6"
+                    "/sales/masterdata/price-policy"
                 ],
-                "Marketplace": [
-                    "/sales/masterdata/marketplace",
-                    "/sales/masterdata/marketplace/add",
-                    "/sales/masterdata/marketplace/edit/10",
-                    "/sales/masterdata/marketplace/view/10"
+                "Market Place": [
+                    "/sales/masterdata/marketplace"
                 ],
-                "Projects": [
-                    "/sales/masterdata/project",
-                    "/sales/masterdata/project/add",
-                    "/sales/masterdata/project/edit/6",
-                    "/sales/masterdata/project/view/6"
-                ],
-                "Opening Balance": [
-                    "/sales/masterdata/customer-opening-balance",
-                    "/sales/masterdata/customer-opening-balance/add",
-                    "/sales/masterdata/customer-opening-balance/edit/1",
-                    "/sales/masterdata/customer-opening-balance/view/1"
+                "Project Definition": [
+                    "/sales/masterdata/project"
                 ]
             },
-            "Transactions": {
+            "Transaction": {
+                "Customer Opening Balance": [
+                    "/sales/transactions/customer-opening-balance"
+                ],
                 "Sales Order": [
-                    "/sales/transactions/sales-order",
-                    "/sales/transactions/sales-order/add",
-                    "/sales/transactions/sales-order/edit/37",
-                    "/sales/transactions/sales-order/view/37"
+                    "/sales/transactions/sales-order"
                 ],
                 "Sales Invoice": [
-                    "/sales/transactions/sales-invoice",
-                    "/sales/transactions/sales-invoice/sequence",
-                    "/sales/transactions/sales-invoice/add",
-                    "/sales/transactions/sales-invoice/view/48",
-                    "/sales/transactions/sales-invoice/edit/48"
+                    "/sales/transactions/sales-invoice"
                 ],
-                "Return Invoice": [
-                    "/sales/transactions/return-sales-invoice",
-                    "/sales/transactions/return-sales-invoice/sequence",
-                    "/sales/transactions/return-sales-invoice/add",
-                    "/sales/transactions/return-sales-invoice/view/10",
-                    "/sales/transactions/return-sales-invoice/edit/10"
+                "Return Sales Invoice": [
+                    "/sales/transactions/return-sales-invoice"
                 ],
                 "Project Invoice": [
-                    "/sales/transactions/project-invoice",
-                    "/sales/transactions/project-invoice/add",
-                    "/sales/transactions/project-invoice/view/3",
-                    "/sales/transactions/project-invoice/edit/3"
+                    "/sales/transactions/project-invoice"
+                ],
+                "Sessions": [
+                    "/sales/transactions/Sessions"
+                ],
+                "POS Sales Invoice": [
+                    "/sales/transactions/pos-sales-invoice"
+                ],
+                "POS Return Sales Invoice": [
+                    "/sales/transactions/pos-return-sales-invoice"
                 ]
             },
             "Reports": {
                 "Customer Statement": [
                     "/sales/reports/customer-statement-report"
                 ],
-                "Customer Balance": [
+                "Customer Balance Report": [
                     "/sales/reports/customer-balance-report"
+                ],
+                "Customer Aging Report": [
+                    "/sales/reports/customer-aging-report"
+                ],
+                "Sales Invoice Report": [
+                    "/sales/reports/sales-invoice-report"
+                ]
+            }
+        },
+        "Purchase": {
+            "Master_data": {
+                "Vendor Category": [
+                    "/purchase/masterdata/vendor-category"
+                ],
+                "Vendor Definition": [
+                    "/purchase/masterdata/vendor-definitions"
+                ]
+            },
+            "Transaction": {
+                "Vendor Opening Balance": [
+                    "/purchase/transactions/vendor-opening-balance"
+                ],
+                "Purchase Order": [
+                    "/purchase/transactions/purchase-order"
+                ],
+                "Purchase Invoice": [
+                    "/purchase/transactions/purchase-invoice"
+                ],
+                "Return Purchase Invoice": [
+                    "/purchase/transactions/return-purchase-invoice"
+                ]
+            },
+            "Reports": {
+                "Vendor Statement": [
+                    "/purchase/reports/vendor-reports"
+                ],
+                "Vendor Balance Report": [
+                    "/purchase/reports/vendor-balance-report"
+                ],
+                "Purchase Invoice Report": [
+                    "/purchase/reports/purchase-invoice-report"
                 ]
             }
         },
         "Inventory": {
-            "Dashboard": [
-                "/inventory/"
-            ],
             "Master_data": {
-                "General Settings": [
+                "Inventory General Settings": [
                     "/inventory/masterdata/general-setting"
                 ],
-                "Warehouse": [
-                    "/inventory/masterdata/warehouse",
-                    "/inventory/masterdata/warehouse/edit-warehouse/40"
-                ],
-                "Item Definition": [
-                    "/inventory/masterdata/item-definition",
-                    "/inventory/masterdata/item-definition/sequence",
-                    "/inventory/masterdata/item-definition/add-item-definition/general/108"
-                ],
-                "Item Categories": [
+                "Item Category": [
                     "/inventory/masterdata/items-category"
                 ],
-                "Unit of Measure": [
-                    "/inventory/masterdata/uom",
-                    "/inventory/masterdata/uom/add-uom",
-                    "/inventory/masterdata/uom/view-uom/31",
-                    "/inventory/masterdata/uom/edit-uom/31"
+                "Re-order Rules": [
+                    "/inventory/masterdata/items-ReOrderRules"
                 ],
-                "Attributes": [
-                    "/inventory/masterdata/attribute-definition",
-                    "/inventory/masterdata/attribute-definition/add-attribute",
-                    "/inventory/masterdata/attribute-definition/edit-attribute/40",
-                    "/inventory/masterdata/attribute-definition/view/40"
+                "Item Definition": [
+                    "/inventory/masterdata/item-definition"
                 ],
-                "Operational Tags": [
-                    "/inventory/masterdata/operational-tag",
-                    "/inventory/masterdata/operational-tag/add-operational-tag",
-                    "/inventory/masterdata/operational-tag/edit-operational-tag/36"
+                "UOM": [
+                    "/inventory/masterdata/uom"
+                ],
+                "Attributes definitions": [
+                    "/inventory/masterdata/attribute-definition"
+                ],
+                "Warehouse definitions": [
+                    "/inventory/masterdata/warehouse"
+                ],
+                "Operational Tag": [
+                    "/inventory/masterdata/operational-tag"
                 ]
             },
-            "Transactions": {
-                "Stock In": [
-                    "/inventory/transactions/stockin",
-                    "/inventory/transactions/stockin/sequence",
-                    "/inventory/transactions/stockin/add",
-                    "/inventory/transactions/stockin/view/130",
-                    "/inventory/transactions/stockin/edit/130"
+            "Transaction": {
+                "Inventory Opening Balance": [
+                    "/inventory/transactions/opening-balance"
                 ],
-                "Stock Out": [
-                    "/inventory/transactions/stockout",
-                    "/inventory/transactions/stockout/sequence",
-                    "/inventory/transactions/stockout/add",
-                    "/inventory/transactions/stockout/view/26",
-                    "/inventory/transactions/stockout/edit/26"
+                "Inventory Count": [
+                    "/inventory/transactions/inventory-reconciliation"
                 ],
-                "Opening Balance": [
-                    "/inventory/transactions/opening-balance",
-                    "/inventory/transactions/opening-balance/sequence",
-                    "/inventory/transactions/opening-balance/add",
-                    "/inventory/transactions/opening-balance/view/12",
-                    "/inventory/transactions/opening-balance/edit/12"
+                "Stock IN": [
+                    "/inventory/transactions/stockin"
+                ],
+                "Stock OUT": [
+                    "/inventory/transactions/stockout"
                 ],
                 "Stock Transfer": [
-                    "/inventory/transactions/stocktransfer",
-                    "/inventory/transactions/stocktransfer/add",
-                    "/inventory/transactions/stocktransfer/edit/5",
-                    "/inventory/transactions/stocktransfer/view/5"
+                    "/inventory/transactions/stocktransfer"
                 ]
             },
             "Reports": {
-                "Item Card": [
+                "Item Card Report": [
                     "/inventory/reports/item-card-report"
+                ],
+                "Inventory balance Report": [
+                    "/inventory/reports/inventory-balance-Report"
                 ]
             }
+        },
+        "Distribution": {
+            "Master_data": {
+                "Device Management": [
+                    "/distribution/masterdata/device-management"
+                ],
+                "Journey Plan": [
+                    "/distribution/masterdata/journey-plan"
+                ]
+            },
+            "Transaction": {
+                "Transfer Request": [
+                    "/distribution/transactions/transfer-management"
+                ]
+            },
+            "Reports": {}
+        },
+        "Human_Resources": {
+            "Master_data": {
+                "Employee": [
+                    "/human-resources/masterdata/employee"
+                ]
+            },
+            "Transaction": {},
+            "Reports": {}
+        },
+        "Fixed_Assets": {
+            "Master_data": {
+                "Fixed Assets Groups": [
+                    "/fixed-assets/masterdata/assets-groups"
+                ],
+                "Assets": [
+                    "/fixed-assets/masterdata/assets-definitions"
+                ],
+                "Assets Locations": [
+                    "/fixed-assets/masterdata/assets-locations"
+                ]
+            },
+            "Transaction": {
+                "Assets Opening Balances": [
+                    "/fixed-assets/transactions/assets-opening-balances"
+                ]
+            },
+            "Reports": {}
         }
     }
 }
