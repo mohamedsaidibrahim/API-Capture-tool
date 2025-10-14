@@ -36,9 +36,9 @@ export class UrlRepository implements IUrlRepository {
                     const value = moduleData[key];
                     if (Array.isArray(value)) {
                         value.forEach(urlSuffix => {
-                            const fullUrl = `${jsonData.base_url}${urlSuffix}`.replace(/([^:]\/)\/+/g, "$1");
+                            const normalizedUrl = this.normalizeUrl(jsonData.base_url, urlSuffix);
                             structuredUrls.push(
-                                UrlStructure.create(moduleName, key, currentPath || key, fullUrl)
+                                UrlStructure.create(moduleName, key, currentPath || key, normalizedUrl)
                             );
                         });
                     } else if (typeof value === 'object' && value !== null) {
@@ -52,12 +52,47 @@ export class UrlRepository implements IUrlRepository {
                 parseModule(moduleName, jsonData.modules[moduleName], initialPath);
             }
 
-            return structuredUrls.sort((a, b) => b.url.length - a.url.length);
+            const validatedUrls = this.validateAndDeduplicateUrls(structuredUrls);
+            return validatedUrls.sort((a, b) => b.url.length - a.url.length);
         } catch (error: any) {
             if (error instanceof FileSystemException) {
                 throw error;
             }
             throw new FileSystemException(`Failed to load URLs: ${error.message}`);
         }
+    }
+
+    private normalizeUrl(baseUrl: string, urlSuffix: string): string {
+        // Remove trailing slash from baseUrl and leading slash from urlSuffix
+        const cleanBaseUrl = baseUrl.replace(/\/$/, '');
+        const cleanSuffix = urlSuffix.replace(/^\//, '');
+
+        const fullUrl = `${cleanBaseUrl}/${cleanSuffix}`;
+
+        // Validate URL format
+        try {
+            new URL(fullUrl);
+            return fullUrl;
+        } catch (error) {
+            console.warn(`⚠️ Invalid URL constructed: ${fullUrl}`);
+            throw new FileSystemException(`Invalid URL format: ${fullUrl}`);
+        }
+    }
+
+    private validateAndDeduplicateUrls(urls: UrlStructure[]): UrlStructure[] {
+        const seen = new Set<string>();
+        const validated: UrlStructure[] = [];
+
+        for (const urlStruct of urls) {
+            if (!seen.has(urlStruct.url)) {
+                seen.add(urlStruct.url);
+                validated.push(urlStruct);
+            } else {
+                console.warn(`⚠️ Duplicate URL skipped: ${urlStruct.url}`);
+            }
+        }
+
+        console.log(`✅ Validated ${validated.length} unique URLs from ${urls.length} total`);
+        return validated;
     }
 }

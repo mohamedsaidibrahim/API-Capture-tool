@@ -1,5 +1,5 @@
 // src/infrastructure/file-system/api-endpoint.repository.ts
-import { IApiEndpointRepository } from '../../core/interfaces/file-system.interface';
+import { IApiEndpointRepository, NavigationFailure } from '../../core/interfaces/file-system.interface';
 import { OrganizedEndpoints } from '../../core/entities/organized-endpoints.entity';
 import { IFileSystem } from '../../core/interfaces/file-system.interface';
 import { IConfiguration } from '../../core/interfaces/config.interface';
@@ -35,6 +35,22 @@ export class ApiEndpointRepository implements IApiEndpointRepository {
             const sectionFilePath = path.join(sectionDir, `${sectionName}_endpoints.json`);
             this.fileSystem.writeFileSync(sectionFilePath, JSON.stringify(sectionData, null, 2));
         }
+    }
+
+    async saveNavigationFailures(failures: NavigationFailure[]): Promise<void> {
+        const outputDir = this.config.getOutputDir();
+        this.ensureDirectoryExists(outputDir);
+
+        const failuresPath = path.join(outputDir, "navigation_failures.json");
+
+        const failuresWithTimestamp = failures.map(failure => ({
+            ...failure,
+            timestamp: new Date().toISOString()
+        }));
+
+        this.fileSystem.writeFileSync(failuresPath, JSON.stringify(failuresWithTimestamp, null, 2));
+
+        console.log(`📝 Saved ${failures.length} navigation failures to analysis file`);
     }
 
     private ensureDirectoryExists(dirPath: string): void {
