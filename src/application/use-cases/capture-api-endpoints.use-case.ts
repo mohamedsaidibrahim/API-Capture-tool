@@ -4,26 +4,38 @@ import { IApiEndpointRepository, NavigationFailure } from '../../core/interfaces
 import { IApiCaptureService } from '../../core/interfaces/services.interface';
 import { IAuthenticationService } from '../../core/interfaces/services.interface';
 import { IUrlCategorizationService } from '../../core/interfaces/services.interface';
-import { OrganizedEndpoints } from '../../core/entities/organized-endpoints.entity';
+import { OrganizedEndpoints, ExportPrintEndpoints } from '../../core/entities/organized-endpoints.entity';
+import { ExportPrintCaptureService, ExportPrintApis } from '../services/export-print-capture.service';
 
 interface CaptureSummary {
     totalUrls: number;
     successfulNavigations: number;
     capturedEndpoints: number;
     failedUrls: number;
+    exportPrintUrls: number;
     startTime: Date;
     endTime: Date | null;
     duration: string | null;
 }
 
 export class CaptureApiEndpointsUseCase {
+    private exportPrintCaptureService: ExportPrintCaptureService;
+
     constructor(
         private readonly urlRepository: IUrlRepository,
         private readonly apiEndpointRepository: IApiEndpointRepository,
         private readonly apiCaptureService: IApiCaptureService,
         private readonly authenticationService: IAuthenticationService,
-        private readonly urlCategorizationService: IUrlCategorizationService
-    ) { }
+        private readonly urlCategorizationService: IUrlCategorizationService,
+        private readonly page: any // IPage interface
+    ) {
+        this.exportPrintCaptureService = new ExportPrintCaptureService(
+            // Assuming we have access to configuration
+            {} as any, // IConfiguration
+            this.page,
+            this.apiCaptureService
+        );
+    }
 
     async execute(): Promise<{ success: boolean; summary: CaptureSummary }> {
         console.log("🚀 Starting API Endpoint Capture Process...");
@@ -33,6 +45,7 @@ export class CaptureApiEndpointsUseCase {
             successfulNavigations: 0,
             capturedEndpoints: 0,
             failedUrls: 0,
+            exportPrintUrls: 0,
             startTime: new Date(),
             endTime: null,
             duration: null
@@ -53,8 +66,8 @@ export class CaptureApiEndpointsUseCase {
             console.log("🔐 Authenticating...");
             await this.authenticationService.login();
 
-            // Step 3: Capture APIs
-            console.log("🎯 Capturing API endpoints...");
+            // Step 3: Capture Regular APIs
+            console.log("🎯 Capturing regular API endpoints...");
             const capturedEndpoints = await this.apiCaptureService.captureApisFromUrls(urls);
             summary.capturedEndpoints = capturedEndpoints.length;
 
@@ -63,23 +76,36 @@ export class CaptureApiEndpointsUseCase {
             summary.failedUrls = navigationFailures.size;
             summary.successfulNavigations = urls.length - navigationFailures.size;
 
-            console.log(`✅ Captured ${capturedEndpoints.length} unique API endpoints`);
+            console.log(`✅ Captured ${capturedEndpoints.length} regular API endpoints`);
 
-            if (capturedEndpoints.length === 0) {
-                console.warn("⚠️ No API endpoints were captured");
-                return { success: false, summary };
-            }
+            // Step 4: Capture Export/Print APIs
+            console.log("\n📊 Starting Export/Print API Capture...");
+            const exportPrintResults = await this.exportPrintCaptureService.captureExportPrintApis(urls);
+            summary.exportPrintUrls = exportPrintResults.size;
 
-            // Step 4: Categorize endpoints
+            console.log(`✅ Captured export/print APIs from ${exportPrintResults.size} URLs`);
+
+            // Step 5: Categorize endpoints
             console.log("🏷️ Categorizing endpoints...");
             const organizedEndpoints = new OrganizedEndpoints();
 
+            // Categorize regular endpoints
             for (const endpoint of capturedEndpoints) {
                 const categorized = this.urlCategorizationService.categorizeEndpoint(endpoint, urls);
                 organizedEndpoints.addEndpoint(categorized);
             }
 
-            // Step 5: Save results
+            // Add export/print endpoints
+            exportPrintResults.forEach((apis, url) => {
+                const exportPrintData: ExportPrintEndpoints = {
+                    "Export-EXCEL": this.formatExportPrintApis(apis.excel),
+                    "Export-PDF": this.formatExportPrintApis(apis.pdf),
+                    "Print": this.formatExportPrintApis(apis.print)
+                };
+                organizedEndpoints.addExportPrintEndpoints(url, exportPrintData);
+            });
+
+            // Step 6: Save results
             console.log("💾 Saving results...");
             await this.apiEndpointRepository.saveEndpoints(organizedEndpoints);
 
@@ -100,6 +126,9 @@ export class CaptureApiEndpointsUseCase {
                 }
                 await this.apiEndpointRepository.saveModuleEndpoints(module, moduleData);
             }
+
+            // Save export/print summary
+            await this.saveExportPrintSummary(exportPrintResults);
 
             // Save navigation failures for analysis
             if (navigationFailures.size > 0) {
@@ -135,22 +164,61 @@ export class CaptureApiEndpointsUseCase {
         }
     }
 
+
+
+
+    private formatExportPrintApis(apis: any[]): any[] {
+        return apis.map(api => ({
+            method: api.method,
+            endpoint: api.url,
+            timestamp: api.timestamp?.toISOString() || new Date().toISOString()
+        }));
+    }
+
+    private async saveExportPrintSummary(exportPrintResults: Map<string, ExportPrintApis>): Promise<void> {
+        const summary: any = {
+            totalUrlsWithExportPrint: exportPrintResults.size,
+            urls: {}
+        };
+
+        exportPrintResults.forEach((apis, url) => {
+            summary.urls[url] = {
+                hasExcelExport: apis.excel.length > 0,
+                hasPdfExport: apis.pdf.length > 0,
+                hasPrint: apis.print.length > 0,
+                excelApiCount: apis.excel.length,
+                pdfApiCount: apis.pdf.length,
+                printApiCount: apis.print.length
+            };
+        });
+
+        // Save to a separate file for easy analysis
+        // This would use the fileSystem service to write the summary
+        console.log(`📝 Export/Print summary: ${exportPrintResults.size} URLs have export/print capabilities`);
+    }
+
     private printSummary(summary: CaptureSummary): void {
-        console.log("\n" + "=".repeat(50));
+        console.log("\n" + "=".repeat(60));
         console.log("📊 CAPTURE SUMMARY");
-        console.log("=".repeat(50));
-        console.log(`Total URLs: ${summary.totalUrls}`);
+        console.log("=".repeat(60));
+        console.log(`Total URLs Processed: ${summary.totalUrls}`);
         console.log(`Successful Navigations: ${summary.successfulNavigations}`);
         console.log(`Failed Navigations: ${summary.failedUrls}`);
-        console.log(`Captured Endpoints: ${summary.capturedEndpoints}`);
+        console.log(`URLs with Export/Print: ${summary.exportPrintUrls}`);
+        console.log(`Regular APIs Captured: ${summary.capturedEndpoints}`);
 
         const successRate = summary.totalUrls > 0
             ? ((summary.successfulNavigations / summary.totalUrls) * 100).toFixed(1)
             : '0.0';
 
-        console.log(`Success Rate: ${successRate}%`);
+        const exportPrintRate = summary.totalUrls > 0
+            ? ((summary.exportPrintUrls / summary.totalUrls) * 100).toFixed(1)
+            : '0.0';
+
+        console.log(`Navigation Success Rate: ${successRate}%`);
+        console.log(`Export/Print Coverage: ${exportPrintRate}%`);
         console.log(`Duration: ${summary.duration}`);
-        console.log("=".repeat(50));
+        console.log("=".repeat(60));
     }
 
     private formatDuration(start: Date, end: Date): string {

@@ -15,6 +15,11 @@ export interface IPage {
     fill(selector: string, value: string): Promise<void>;
     click(selector: string): Promise<void>;
     url(): string;
+    waitForTimeout(ms: number): Promise<void>;
+    $$(selector: string): Promise<any[]>;
+    keyboard: {
+        press(key: string): Promise<void>;
+    };
 }
 
 export interface IRequest {

@@ -1,8 +1,15 @@
-import { CategorizedEndpoint } from "./categorized-endpoint.entity";
-
 // src/core/entities/organized-endpoints.entity.ts
+import { CategorizedEndpoint } from './categorized-endpoint.entity';
+
+export interface ExportPrintEndpoints {
+    "Export-EXCEL": any[];
+    "Export-PDF": any[];
+    "Print": any[];
+}
+
 export class OrganizedEndpoints {
     private endpoints: Map<string, Map<string, Map<string, CategorizedEndpoint[]>>> = new Map();
+    private exportPrintEndpoints: Map<string, ExportPrintEndpoints> = new Map();
 
     addEndpoint(categorized: CategorizedEndpoint): void {
         const { module, section, subSection, endpoint } = categorized;
@@ -40,9 +47,22 @@ export class OrganizedEndpoints {
         return this.endpoints.get(module)?.get(section)?.get(subSection) || [];
     }
 
+    addExportPrintEndpoints(url: string, endpoints: ExportPrintEndpoints): void {
+        this.exportPrintEndpoints.set(url, endpoints);
+    }
+
+    getExportPrintEndpoints(url: string): ExportPrintEndpoints | undefined {
+        return this.exportPrintEndpoints.get(url);
+    }
+
+    getAllExportPrintEndpoints(): Map<string, ExportPrintEndpoints> {
+        return new Map(this.exportPrintEndpoints);
+    }
+
     toJSON(): any {
         const result: any = {};
 
+        // Existing structure
         for (const [module, sections] of this.endpoints) {
             result[module] = {};
 
@@ -58,6 +78,14 @@ export class OrganizedEndpoints {
                     }));
                 }
             }
+        }
+
+        // Add export/print endpoints
+        if (this.exportPrintEndpoints.size > 0) {
+            result.exportPrintEndpoints = {};
+            this.exportPrintEndpoints.forEach((endpoints: ExportPrintEndpoints, url: string) => {
+                result.exportPrintEndpoints[url] = endpoints;
+            });
         }
 
         return result;

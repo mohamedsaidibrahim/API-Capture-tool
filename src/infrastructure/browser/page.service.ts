@@ -44,4 +44,16 @@ export class PageService implements IPage {
     url(): string {
         return this.page.url();
     }
+
+    async waitForTimeout(ms: number): Promise<void> {
+        await this.page.waitForTimeout(ms);
+    }
+
+    async $$(selector: string): Promise<any[]> {
+        return this.page.$$(selector);
+    }
+
+    get keyboard() {
+        return this.page.keyboard;
+    }
 }

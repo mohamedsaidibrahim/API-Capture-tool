@@ -25,7 +25,7 @@ export class CompositionRoot {
     public urlCategorizationService: UrlCategorizationService;
 
     // Use Cases
-    public readonly captureApiEndpointsUseCase: CaptureApiEndpointsUseCase;
+    public captureApiEndpointsUseCase!: CaptureApiEndpointsUseCase;
 
     private constructor() {
         // Infrastructure
@@ -40,14 +40,7 @@ export class CompositionRoot {
         this.authenticationService = null as any;
         this.urlCategorizationService = new UrlCategorizationService(this.config);
 
-        // Use Cases
-        this.captureApiEndpointsUseCase = new CaptureApiEndpointsUseCase(
-            this.urlRepository,
-            this.apiEndpointRepository,
-            null as any, // Will be set after service initialization
-            null as any, // Will be set after service initialization
-            this.urlCategorizationService
-        );
+        // Use Cases (initialized after browser setup)
     }
 
     static getInstance(): CompositionRoot {
@@ -68,9 +61,18 @@ export class CompositionRoot {
         // Update use case with the initialized services
         (this.captureApiEndpointsUseCase as any).apiCaptureService = this.apiCaptureService;
         (this.captureApiEndpointsUseCase as any).authenticationService = this.authenticationService;
-    }
+        // Initialize services that depend on browser/page
+        this.apiCaptureService = new ApiCaptureService(this.config, page);
+        this.authenticationService = new AuthenticationService(this.config, page);
 
-    async cleanup(): Promise<void> {
-        await this.browserFactory.close();
+        // Create the use case now that browser/page-dependent services and page are available
+        this.captureApiEndpointsUseCase = new CaptureApiEndpointsUseCase(
+            this.urlRepository,
+            this.apiEndpointRepository,
+            this.apiCaptureService,
+            this.authenticationService,
+            this.urlCategorizationService,
+            page
+        );
     }
 }
