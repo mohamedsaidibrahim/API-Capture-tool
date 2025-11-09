@@ -2,11 +2,11 @@
 import { CompositionRoot } from './composition-root';
 
 async function main() {
+    console.log("🚀 Starting API Capture Tool...");
+
     const app = CompositionRoot.getInstance();
 
     try {
-        console.log("🚀 Initializing API Capture Tool...");
-
         // Initialize browser-dependent services
         await app.initializeBrowserServices();
 
@@ -56,7 +56,10 @@ process.on('SIGTERM', async () => {
 
 // Run the application
 if (require.main === module) {
-    main();
+    main().catch(error => {
+        console.error('💥 Fatal error in main:', error);
+        process.exit(1);
+    });
 }
 
 export { main };

@@ -2,22 +2,27 @@
   "name": "api-capture-tool",
   "version": "1.0.0",
   "description": "Advanced API endpoint capture tool following SOLID principles",
-  "main": "dist/src/main/main.js",
+  "main": "dist/main/main.js",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/src/main/main.js",
+    "start": "node dist/main/main.js",
     "dev": "ts-node src/main/main.ts",
+    "clean": "rimraf dist",
+    "build:clean": "npm run clean && npm run build",
     "test": "jest",
     "lint": "eslint src/**/*.ts"
   },
   "dependencies": {
-    "@types/node": "^24.7.0",
-    "@typescript-eslint/eslint-plugin": "^8.46.0",
-    "@typescript-eslint/parser": "^8.46.0",
     "dotenv": "^17.2.3",
-    "eslint": "^9.37.0",
+    "playwright": "^1.56.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "@typescript-eslint/eslint-plugin": "^8.46.3",
+    "@typescript-eslint/parser": "^8.46.3",
+    "eslint": "^9.39.1",
     "jest": "^30.2.0",
-    "playwright": "^1.56.0",
+    "rimraf": "^6.1.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   }

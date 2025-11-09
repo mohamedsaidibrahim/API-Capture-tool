@@ -7,6 +7,7 @@ import { BrowserFactory } from '../infrastructure/browser/browser-factory.servic
 import { ApiCaptureService } from '../application/services/api-capture.service';
 import { AuthenticationService } from '../application/services/authentication.service';
 import { UrlCategorizationService } from '../application/services/url-categorization.service';
+import { ExportPrintCaptureService } from '../application/services/export-print-capture.service';
 import { CaptureApiEndpointsUseCase } from '../application/use-cases/capture-api-endpoints.use-case';
 
 export class CompositionRoot {
@@ -20,9 +21,10 @@ export class CompositionRoot {
     public readonly browserFactory: BrowserFactory;
 
     // Services
-    public apiCaptureService: ApiCaptureService;
-    public authenticationService: AuthenticationService;
-    public urlCategorizationService: UrlCategorizationService;
+    public apiCaptureService!: ApiCaptureService;
+    public authenticationService!: AuthenticationService;
+    public readonly urlCategorizationService: UrlCategorizationService;
+    public exportPrintCaptureService!: ExportPrintCaptureService;
 
     // Use Cases
     public captureApiEndpointsUseCase!: CaptureApiEndpointsUseCase;
@@ -35,12 +37,10 @@ export class CompositionRoot {
         this.apiEndpointRepository = new ApiEndpointRepository(this.fileSystem, this.config);
         this.browserFactory = new BrowserFactory();
 
-        // Services (will be initialized after browser setup)
-        this.apiCaptureService = null as any;
-        this.authenticationService = null as any;
+        // Services
         this.urlCategorizationService = new UrlCategorizationService(this.config);
 
-        // Use Cases (initialized after browser setup)
+        console.log("✅ Composition Root initialized");
     }
 
     static getInstance(): CompositionRoot {
@@ -51,28 +51,33 @@ export class CompositionRoot {
     }
 
     async initializeBrowserServices(): Promise<void> {
+        console.log("🔄 Initializing browser services...");
+
         const browser = await this.browserFactory.createBrowser();
         const page = await this.browserFactory.createPage();
 
         // Initialize services that depend on browser/page
         this.apiCaptureService = new ApiCaptureService(this.config, page);
         this.authenticationService = new AuthenticationService(this.config, page);
+        this.exportPrintCaptureService = new ExportPrintCaptureService(this.config, page, this.apiCaptureService);
 
         // Update use case with the initialized services
-        (this.captureApiEndpointsUseCase as any).apiCaptureService = this.apiCaptureService;
-        (this.captureApiEndpointsUseCase as any).authenticationService = this.authenticationService;
-        // Initialize services that depend on browser/page
-        this.apiCaptureService = new ApiCaptureService(this.config, page);
-        this.authenticationService = new AuthenticationService(this.config, page);
-
-        // Create the use case now that browser/page-dependent services and page are available
         this.captureApiEndpointsUseCase = new CaptureApiEndpointsUseCase(
             this.urlRepository,
             this.apiEndpointRepository,
             this.apiCaptureService,
             this.authenticationService,
             this.urlCategorizationService,
+            // this.config,
             page
         );
+
+        console.log("✅ Browser services initialized");
+    }
+
+    async cleanup(): Promise<void> {
+        console.log("🧹 Cleaning up resources...");
+        await this.browserFactory.close();
+        console.log("✅ Cleanup completed");
     }
 }
