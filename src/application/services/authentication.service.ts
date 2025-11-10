@@ -3,7 +3,7 @@ import { IAuthenticationService } from '../../core/interfaces/services.interface
 import { IConfiguration } from '../../core/interfaces/config.interface';
 import { IPage } from '../../core/interfaces/browser.interface';
 import { AuthenticationException } from '../../core/exceptions/base.exception';
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 dotenv.config();
 
 export class AuthenticationService implements IAuthenticationService {

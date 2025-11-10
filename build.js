@@ -1,4 +1,4 @@
-# build.js - Build helper script
+// # build.js - Build helper script
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');

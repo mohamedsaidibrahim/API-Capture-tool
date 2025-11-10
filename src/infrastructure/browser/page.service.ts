@@ -1,10 +1,11 @@
 // src/infrastructure/browser/page.service.ts
-import { IPage, IRequest, IResponse } from '../../core/interfaces/browser.interface';
-import { Page, Request, Response } from 'playwright';
+import { IPage, IRequest, IResponse, IElementHandle } from '../../core/interfaces/browser.interface';
+import { Page, Request, Response, ElementHandle } from 'playwright';
 
 export class PageService implements IPage {
     constructor(private readonly page: Page) { }
 
+    // Existing methods
     onRequest(callback: (request: IRequest) => void): void {
         this.page.on('request', (request: Request) => {
             callback({
@@ -55,5 +56,38 @@ export class PageService implements IPage {
 
     get keyboard() {
         return this.page.keyboard;
+    }
+
+    // NEW METHODS - Add these implementations
+    async $(selector: string): Promise<any | null> {
+        return this.page.$(selector);
+    }
+
+    async waitForLoadState(state?: 'load' | 'domcontentloaded' | 'networkidle', options?: any): Promise<void> {
+        await this.page.waitForLoadState(state, options);
+    }
+
+    isClosed(): boolean {
+        return this.page.isClosed();
+    }
+
+    async reload(options?: any): Promise<any> {
+        return this.page.reload(options);
+    }
+
+    async bringToFront(): Promise<void> {
+        await this.page.bringToFront();
+    }
+
+    async focus(selector: string): Promise<void> {
+        await this.page.focus(selector);
+    }
+
+    async hover(selector: string): Promise<void> {
+        await this.page.hover(selector);
+    }
+
+    async press(key: string): Promise<void> {
+        await this.page.press('body', key);
     }
 }

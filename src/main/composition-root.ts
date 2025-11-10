@@ -59,7 +59,14 @@ export class CompositionRoot {
         // Initialize services that depend on browser/page
         this.apiCaptureService = new ApiCaptureService(this.config, page);
         this.authenticationService = new AuthenticationService(this.config, page);
-        this.exportPrintCaptureService = new ExportPrintCaptureService(this.config, page, this.apiCaptureService);
+
+        // Enhanced ExportPrintCaptureService with configuration
+        this.exportPrintCaptureService = new ExportPrintCaptureService(
+            this.config,
+            page,
+            this.apiCaptureService,
+            this.config.getExportPrintConfig() // Pass configuration
+        );
 
         // Update use case with the initialized services
         this.captureApiEndpointsUseCase = new CaptureApiEndpointsUseCase(
@@ -68,7 +75,6 @@ export class CompositionRoot {
             this.apiCaptureService,
             this.authenticationService,
             this.urlCategorizationService,
-            // this.config,
             page
         );
 

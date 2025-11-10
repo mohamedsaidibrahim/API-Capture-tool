@@ -7,19 +7,19 @@
     "build": "tsc",
     "start": "node dist/main/main.js",
     "dev": "ts-node src/main/main.ts",
-    "clean": "rimraf dist",
+    "clean": "rimraf dist node_modules package-lock.json",
     "build:clean": "npm run clean && npm run build",
     "test": "jest",
     "lint": "eslint src/**/*.ts"
   },
   "dependencies": {
-    "dotenv": "^17.2.3",
     "playwright": "^1.56.1"
   },
   "devDependencies": {
     "@types/node": "^24.10.0",
     "@typescript-eslint/eslint-plugin": "^8.46.3",
     "@typescript-eslint/parser": "^8.46.3",
+    "dotenv": "^17.2.3",
     "eslint": "^9.39.1",
     "jest": "^30.2.0",
     "rimraf": "^6.1.0",

@@ -11,6 +11,14 @@ export class ConfigurationService implements IConfiguration {
         this.loadConfiguration();
     }
 
+    getExportPrintConfig() {
+        return {
+            maxRetries: parseInt(process.env.EXPORT_PRINT_MAX_RETRIES || '3'),
+            interactionTimeout: parseInt(process.env.EXPORT_PRINT_TIMEOUT || '10000'),
+            waitForNetworkIdle: process.env.EXPORT_PRINT_WAIT_NETWORK !== 'false'
+        };
+    }
+
     private loadConfiguration(): void {
         try {
             this.config.set('USERNAME', process.env.API_CAPTURE_USERNAME);
